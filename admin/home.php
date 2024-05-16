@@ -6,12 +6,9 @@
       <span class="info-box-icon bg-gradient-dark elevation-1"><i class="fas fa-copyright"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text">Marcas</span>
+        <span class="info-box-text">Clientes</span>
         <span class="info-box-number">
-          <?php
-          $inv = $conn->query("SELECT count(id) as total FROM brand_list where delete_flag = 0 ")->fetch_assoc()['total'];
-          echo number_format($inv);
-          ?>
+         
           <?php ?>
         </span>
       </div>
@@ -25,10 +22,10 @@
       <span class="info-box-icon bg-light elevation-1"><i class="fas fa-th-list"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text">Categorías</span>
+        <span class="info-box-text">Bancos</span>
         <span class="info-box-number">
           <?php
-          $inv = $conn->query("SELECT count(id) as total FROM categories where delete_flag = 0 ")->fetch_assoc()['total'];
+          $inv = $conn->query("SELECT count(id) as id FROM banco where delete_flag = 0")->fetch_assoc()['id'];
           echo number_format($inv);
           ?>
           <?php ?>
@@ -43,7 +40,7 @@
     <div class="shadow info-box mb-3">
       <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users-cog"></i></span>
 
-      <div class="info-box-content">
+      <!-- <div class="info-box-content">
         <span class="info-box-text">Técnicos</span>
         <span class="info-box-number">
           <?php
@@ -51,7 +48,7 @@
           echo number_format($mechanics);
           ?>
         </span>
-      </div>
+      </div> -->
       <!-- /.info-box-content -->
     </div>
     <!-- /.info-box -->

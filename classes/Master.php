@@ -137,6 +137,7 @@ class Master extends DBConnection
 		}
 		return json_encode($resp);
 	}
+
 	function delete_brand()
 	{
 		extract($_POST);
@@ -150,6 +151,244 @@ class Master extends DBConnection
 		}
 		return json_encode($resp);
 	}
+
+// inicio de salvar banco
+	function save_banco()
+	{
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				$v = $this->conn->real_escape_string($v);
+				if (!empty($data)) $data .= ",";
+				$data .= " `{$k}`='{$v}' ";
+				
+			}
+			// var_dump($data);
+		}
+		$check = $this->conn->query("SELECT * FROM `banco` where `des_banco` = '{$des_banco}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		if ($this->capture_err())
+			return $this->capture_err();
+		if ($check > 0) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "El Banco ya existe.";
+			return json_encode($resp);
+			exit;
+		}
+		if (empty($id)) {
+			$sql = "INSERT INTO `banco` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `banco` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if ($save) {
+			$resp['status'] = 'success';
+			$id = empty($id) ? $this->conn->insert_id : $id;
+			if (empty($id))
+				$resp['msg'] = "Nuevo banco guardada con éxito.";
+			else
+				$resp['msg'] = "Banco actualizado correctamente.";
+			if (!empty($_FILES['img']['tmp_name'])) {
+				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+				$dir = base_app . "uploads/banco/";
+				if (!is_dir($dir))
+					mkdir($dir);
+				$name = $id . "." . $ext;
+				if (is_file($dir . $name))
+					unlink($dir . $name);
+				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
+				if ($move) {
+					$this->conn->query("UPDATE `banco` set image_path = CONCAT('uploads/banco/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$id}'");
+				} else {
+					$resp['msg'] .= " El logo no se ha podido cargar";
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if (isset($resp['msg']) && $resp['status'] == 'success') {
+			$this->settings->set_flashdata('success', $resp['msg']);
+		}
+		return json_encode($resp);
+	}
+
+	function delete_banco()
+	{
+		extract($_POST);
+		$del = $this->conn->query("UPDATE `banco` set `delete_flag` = 1  where id = '{$id}'");
+		if ($del) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Banco eliminado con éxito.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	// fin de salvar banco
+
+	// inicio de salvar provncia
+	function save_provincia()
+	{
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				$v = $this->conn->real_escape_string($v);
+				if (!empty($data)) $data .= ",";
+				$data .= " `{$k}`='{$v}' ";
+				
+			}
+			// var_dump($data);
+		}
+		$check = $this->conn->query("SELECT * FROM `provincia` where `des_provincia` = '{$des_provincia}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		if ($this->capture_err())
+			return $this->capture_err();
+		if ($check > 0) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "La provincia ya existe.";
+			return json_encode($resp);
+			exit;
+		}
+		if (empty($id)) {
+			$sql = "INSERT INTO `provincia` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `provincia` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if ($save) {
+			$resp['status'] = 'success';
+			$id = empty($id) ? $this->conn->insert_id : $id;
+			if (empty($id))
+				$resp['msg'] = "Nueva provincia guardada con éxito.";
+			else
+				$resp['msg'] = "Provincia actualizada correctamente.";
+			if (!empty($_FILES['img']['tmp_name'])) {
+				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+				$dir = base_app . "uploads/provincia/";
+				if (!is_dir($dir))
+					mkdir($dir);
+				$name = $id . "." . $ext;
+				if (is_file($dir . $name))
+					unlink($dir . $name);
+				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
+				if ($move) {
+					$this->conn->query("UPDATE `provincia` set image_path = CONCAT('uploads/provincia/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$id}'");
+				} else {
+					$resp['msg'] .= " El logo no se ha podido cargar";
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if (isset($resp['msg']) && $resp['status'] == 'success') {
+			$this->settings->set_flashdata('success', $resp['msg']);
+		}
+		return json_encode($resp);
+	}
+
+	function delete_provincia()
+	{
+		extract($_POST);
+		$del = $this->conn->query("UPDATE `provincia` set `delete_flag` = 1  where id = '{$id}'");
+		if ($del) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Provincia eliminada con éxito.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	// fin de salvar provincia
+
+	// inicio de salvar baja
+	function save_baja()
+	{
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				$v = $this->conn->real_escape_string($v);
+				if (!empty($data)) $data .= ",";
+				$data .= " `{$k}`='{$v}' ";
+				
+			}
+			// var_dump($data);
+		}
+		$check = $this->conn->query("SELECT * FROM `motivo_baja` where `des_baja` = '{$des_baja}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		if ($this->capture_err())
+			return $this->capture_err();
+		if ($check > 0) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "El motivo de baja ya existe.";
+			return json_encode($resp);
+			exit;
+		}
+		if (empty($id)) {
+			$sql = "INSERT INTO `motivo_baja` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `motivo_baja` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if ($save) {
+			$resp['status'] = 'success';
+			$id = empty($id) ? $this->conn->insert_id : $id;
+			if (empty($id))
+				$resp['msg'] = "Nuevo Motivo de baja guardado con éxito.";
+			else
+				$resp['msg'] = "Motivo de baja actualizado correctamente.";
+			if (!empty($_FILES['img']['tmp_name'])) {
+				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+				$dir = base_app . "uploads/baja/";
+				if (!is_dir($dir))
+					mkdir($dir);
+				$name = $id . "." . $ext;
+				if (is_file($dir . $name))
+					unlink($dir . $name);
+				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
+				if ($move) {
+					$this->conn->query("UPDATE `motivo_baja` set image_path = CONCAT('uploads/baja/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$id}'");
+				} else {
+					$resp['msg'] .= " El logo no se ha podido cargar";
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if (isset($resp['msg']) && $resp['status'] == 'success') {
+			$this->settings->set_flashdata('success', $resp['msg']);
+		}
+		return json_encode($resp);
+	}
+
+	function delete_baja()
+	{
+		extract($_POST);
+		$del = $this->conn->query("UPDATE `motivo_baja` set `delete_flag` = 1  where id = '{$id}'");
+		if ($del) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Motivo de baja eliminada con éxito.");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	// fin de salvar Motivo de baja
+
+
+
+
 	function save_product()
 	{
 		$_POST['description'] = htmlentities($_POST['description']);
@@ -650,6 +889,33 @@ switch ($action) {
 	case 'delete_brand':
 		echo $Master->delete_brand();
 		break;
+
+
+
+	case 'save_banco':
+		echo $Master->save_banco();
+		break;
+	case 'delete_banco':
+		echo $Master->delete_banco();
+		break;
+
+
+	case 'save_provincia':
+		echo $Master->save_provincia();
+		break;
+	case 'delete_provincia':
+		echo $Master->delete_provincia();
+		break;
+
+
+	case 'save_baja':
+		echo $Master->save_baja();
+		break;
+	case 'delete_baja':
+		echo $Master->delete_baja();
+		break;
+
+
 	case 'save_service':
 		echo $Master->save_service();
 		break;

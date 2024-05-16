@@ -31,74 +31,74 @@
                   </p>
                 </a>
               </li>
-              <li class="nav-item dropdown">
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=products" class="nav-link nav-products">
                   <i class="nav-icon fas fa-table"></i>
                   <p>
                     Productos
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=inventory" class="nav-link nav-inventory">
                   <i class="nav-icon fas fa-boxes"></i>
                   <p>
                     Inventario
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=orders" class="nav-link nav-orders">
                   <i class="nav-icon fas fa-tasks"></i>
                   <p>
                     Órdenes
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=service_requests" class="nav-link nav-service_requests">
                   <i class="nav-icon fas fa-file-invoice"></i>
                   <p>
                     Solicitudes Servicios
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=mechanics" class="nav-link nav-mechanics">
                   <i class="nav-icon fas fa-user-friends"></i>
                   <p>
                     Técnicos
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=clients" class="nav-link nav-clients">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
                     Clientes Registrados
                   </p>
                 </a>
-              </li>
-              <li class="nav-header">Reportes</li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-header">Reportes</li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=report/service_requests" class="nav-link nav-report_service_requests">
                   <i class="nav-icon fas fa-circle"></i>
                   <p>
                     Informe de solicitudes de servicio
                   </p>
                 </a>
-              </li>
-              <li class="nav-item dropdown">
+              </li> -->
+              <!-- <li class="nav-item dropdown">
                 <a href="<?php echo base_url ?>admin/?page=report/orders" class="nav-link nav-report_orders">
                   <i class="nav-icon fas fa-circle"></i>
                   <p>
                     Reporte de Órdenes
                   </p>
                 </a>
-              </li>
+              </li> -->
               <?php if ($_settings->userdata('type') == 1) : ?>
-                <li class="nav-header">Mantenimiento</li>
-                <li class="nav-item dropdown">
+             
+                <!-- <li class="nav-item dropdown">
                   <a href="<?php echo base_url ?>admin/?page=maintenance/brands" class="nav-link nav-maintenance_brands">
                     <i class="nav-icon fas fa-copyright"></i>
                     <p>
@@ -113,15 +113,64 @@
                       Categorías
                     </p>
                   </a>
-                </li>
-                <li class="nav-item dropdown">
+                </li> -->
+                <!-- <li class="nav-item dropdown">
                   <a href="<?php echo base_url ?>admin/?page=maintenance/services" class="nav-link nav-maintenance_services">
                     <i class="nav-icon fas fa-th-list"></i>
                     <p>
                       Servicios
                     </p>
                   </a>
+                </li> -->
+                
+               <!-- Aqui inicia el side bar de cofrades -->
+
+
+                <li class="nav-header">Cofrades</li>
+                
+               <!-- <li class="nav-item dropdown">
+                <a href="<?php echo base_url ?>admin/?page=cofrades" class="nav-link nav-products">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>
+                   Cofrades
+                  </p>
+                </a>
+              </li> -->
+
+                <li class="nav-item dropdown">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/banco" class="nav-link nav-maintenance_brands">
+                    <i class="nav-icon fas fa-copyright"></i>
+                    <p>
+                     Banco
+                    </p>
+                  </a>
                 </li>
+                <!-- <li class="nav-item dropdown">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/category" class="nav-link nav-maintenance_category">
+                    <i class="nav-icon fas fa-th-list"></i>
+                    <p>
+                     Localidad
+                    </p>
+                  </a>
+                </li> -->
+                <li class="nav-item dropdown">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/provincia" class="nav-link nav-maintenance_category">
+                    <i class="nav-icon fas fa-th-list"></i>
+                    <p>
+                     Provincia
+                    </p>
+                  </a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/baja" class="nav-link nav-maintenance_category">
+                    <i class="nav-icon fas fa-th-list"></i>
+                    <p>
+                     Motivo de baja
+                    </p>
+                  </a>
+                </li>
+                <hr>
+                <li class="nav-header">Configuraciones</li>
                 <li class="nav-item dropdown">
                   <a href="<?php echo base_url ?>admin/?page=user/list" class="nav-link nav-user_list">
                     <i class="nav-icon fas fa-users-cog"></i>
@@ -129,8 +178,8 @@
                       Usuarios
                     </p>
                   </a>
-                </li>
-                <li class="nav-item dropdown">
+                </li> 
+                 <li class="nav-item dropdown">
                   <a href="<?php echo base_url ?>admin/?page=system_info" class="nav-link nav-system_info">
                     <i class="nav-icon fas fa-cogs"></i>
                     <p>
@@ -138,6 +187,7 @@
                     </p>
                   </a>
                 </li>
+
               <?php endif; ?>
             </ul>
           </nav>
