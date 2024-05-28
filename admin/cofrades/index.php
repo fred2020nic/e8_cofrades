@@ -5,9 +5,9 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Productos</h3>
+		<h3 class="card-title">Cofrades</h3>
 		<div class="card-tools">
-			<a href="?page=products/manage_product" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Crear Producto</a>
+			<a href="?page=products/manage_product" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Crear Cofrades</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -26,9 +26,9 @@
 						<tr>
 							<th>#</th>
 							<th>Fecha Creación</th>
-							<th>Marca</th>
-							<th>Nombre</th>
-							<th>Precio</th>
+							<th>Localidad</th>
+							<th>Hermano activo</th>
+							<th>Aspirante</th>
 							<th>Estado</th>
 							<th>Acción</th>
 						</tr>
