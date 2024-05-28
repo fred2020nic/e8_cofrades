@@ -462,6 +462,166 @@ class Master extends DBConnection
 		}
 		return json_encode($resp);
 	}
+
+	// Inicia Save y Delete Localidad
+
+	function save_localidad()
+	{
+		$_POST['description'] = htmlentities($_POST['description']);
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				$v = $this->conn->real_escape_string($v);
+				if (!empty($data)) $data .= ",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		$check = $this->conn->query("SELECT * FROM `localidad` where `name` = '{$name}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		if ($this->capture_err())
+			return $this->capture_err();
+		if ($check > 0) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "La Localidad ya existe";
+			return json_encode($resp);
+			exit;
+		}
+		if (empty($id)) {
+			$sql = "INSERT INTO `localidad` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `localidad` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if ($save) {
+			$resp['status'] = 'success';
+			$pid = empty($id) ? $this->conn->insert_id : $id;
+			$resp['id'] = $pid;
+			if (empty($id))
+				$resp['msg'] = "Nueva localidad guardada con éxito";
+			else
+				$resp['msg'] = "Localidad actualizada con éxito";
+			if (!empty($_FILES['img']['tmp_name'])) {
+				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+				$dir = base_app . "uploads/localidad/";
+				if (!is_dir($dir))
+					mkdir($dir);
+				$name = $pid . "." . $ext;
+				if (is_file($dir . $name))
+					unlink($dir . $name);
+				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
+				if ($move) {
+					$this->conn->query("UPDATE `localidad` set image_path = CONCAT('uploads/localidad/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$pid}'");
+				} else {
+					$resp['msg'] .= " El logotipo no se ha podido cargar";
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if (isset($resp['msg']) && $resp['status'] == 'success') {
+			$this->settings->set_flashdata('success', $resp['msg']);
+		}
+		return json_encode($resp);
+	}
+	function delete_localidad()
+	{
+		extract($_POST);
+		$del = $this->conn->query("UPDATE `localidad` set `delete_flag` = 1  where id = '{$id}'");
+		if ($del) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Localidad eliminada con éxito");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+	// Fianliza Save y Delele Localidad
+
+
+	// Inicia grabado de cofrades
+
+	function save_cofrade()
+	{
+		$_POST['description'] = htmlentities($_POST['description']);
+		extract($_POST);
+		$data = "";
+		foreach ($_POST as $k => $v) {
+			if (!in_array($k, array('id'))) {
+				$v = $this->conn->real_escape_string($v);
+				if (!empty($data)) $data .= ",";
+				$data .= " `{$k}`='{$v}' ";
+			}
+		}
+		$check = $this->conn->query("SELECT * FROM `cofrades` where `Nombre` = '{$Nombre}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		if ($this->capture_err())
+			return $this->capture_err();
+		if ($check > 0) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "El Cofrade ya existe";
+			return json_encode($resp);
+			exit;
+		}
+		if (empty($id)) {
+			$sql = "INSERT INTO `cofrades` set {$data} ";
+			$save = $this->conn->query($sql);
+		} else {
+			$sql = "UPDATE `cofrades` set {$data} where id = '{$id}' ";
+			$save = $this->conn->query($sql);
+		}
+		if ($save) {
+			$resp['status'] = 'success';
+			$pid = empty($id) ? $this->conn->insert_id : $id;
+			$resp['id'] = $pid;
+			if (empty($id))
+				$resp['msg'] = "Nuevo cofrade guardado con éxito";
+			else
+				$resp['msg'] = "Cofrade actualizado con éxito";
+			if (!empty($_FILES['img']['tmp_name'])) {
+				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
+				$dir = base_app . "uploads/cofreade/";
+				if (!is_dir($dir))
+					mkdir($dir);
+				$name = $pid . "." . $ext;
+				if (is_file($dir . $name))
+					unlink($dir . $name);
+				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
+				if ($move) {
+					$this->conn->query("UPDATE `cofrades` set image_path = CONCAT('uploads/cofreade/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$pid}'");
+				} else {
+					$resp['msg'] .= " El logotipo no se ha podido cargar";
+				}
+			}
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = $this->conn->error . "[{$sql}]";
+		}
+		if (isset($resp['msg']) && $resp['status'] == 'success') {
+			$this->settings->set_flashdata('success', $resp['msg']);
+		}
+		return json_encode($resp);
+	}
+	function delete_cofrade()
+	{
+		extract($_POST);
+		$del = $this->conn->query("UPDATE `cofrades` set `delete_flag` = 1  where id = '{$id}'");
+		if ($del) {
+			$resp['status'] = 'success';
+			$this->settings->set_flashdata('success', "Cofrade eliminado con éxito");
+		} else {
+			$resp['status'] = 'failed';
+			$resp['error'] = $this->conn->error;
+		}
+		return json_encode($resp);
+	}
+
+
+	// Finbaliza grabado de cofrades
+
+
 	function save_service()
 	{
 		extract($_POST);
@@ -890,7 +1050,12 @@ switch ($action) {
 		echo $Master->delete_brand();
 		break;
 
-
+	case 'save_cofrade':
+		echo $Master->save_cofrade();
+		break;
+	case 'delete_cofrade':
+		echo $Master->delete_cofrade();
+		break;
 
 	case 'save_banco':
 		echo $Master->save_banco();
@@ -928,6 +1093,20 @@ switch ($action) {
 	case 'delete_product':
 		echo $Master->delete_product();
 		break;
+
+
+	case 'save_localidad':
+		echo $Master->save_localidad();
+		break;
+	case 'delete_localidad':
+		echo $Master->delete_localidad();
+		break;
+
+
+
+
+
+
 	case 'save_stock':
 		echo $Master->save_stock();
 		break;

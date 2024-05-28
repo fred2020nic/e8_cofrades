@@ -128,14 +128,14 @@
 
                 <li class="nav-header">Cofrades</li>
                 
-               <li class="nav-item dropdown">
-                <a href="<?php echo base_url ?>admin/?page=cofrades" class="nav-link nav-products">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                   Cofrades
-                  </p>
-                </a>
-              </li>
+                <li class="nav-item dropdown">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/cofrades" class="nav-link nav-maintenance_category">
+                    <i class="nav-icon fas fa-th-list"></i>
+                    <p>
+                     Cofrades
+                    </p>
+                  </a>
+                </li>
 
                 <li class="nav-item dropdown">
                   <a href="<?php echo base_url ?>admin/?page=cofrades_aux/banco" class="nav-link nav-maintenance_brands">

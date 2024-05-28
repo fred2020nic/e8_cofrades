@@ -5,9 +5,9 @@
 <?php endif; ?>
 <div class="card card-outline card-primary">
 	<div class="card-header">
-		<h3 class="card-title">Localidad</h3>
+		<h3 class="card-title">Cofrades</h3>
 		<div class="card-tools">
-			<a href="?page=cofrades_aux/manage_localidad" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Crear Localidad</a>
+			<a href="?page=cofrades_aux/manage_cofrades" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Crear Cofrades</a>
 		</div>
 	</div>
 	<div class="card-body">
@@ -27,11 +27,12 @@
 						<tr>
 							<th>#</th>
 							<th>Fecha Creación</th>
-							<th>Loclidad</th>
+							<th>Nombres</th>
+							<th>Localidad</th>
 							<th>Provincia</th>
+							<th>Banco</th>
+							<th>Mot. Baja</th>
 							<th>Imagen</th>
-							
-							
 							<th>Estado</th>
 							<th>Acción</th>
 						</tr>
@@ -39,7 +40,7 @@
 					<tbody>
 						<?php
 						$i = 1;
-						$qry = $conn->query("select l.*, pr.des_provincia  as provincia , l.image_path as image_path  from `localidad` l inner JOIN provincia pr on l.provincia_id = pr.id where l.delete_flag = 0 order by ( l. `name`) asc ");
+						$qry = $conn->query("SELECT c.*, CONCAT(c.Nombre, ' ', c.Apellidos) AS nombres, pr.des_provincia AS provincia, l.name AS localidad, b.des_banco AS banco, mb.des_baja AS baja, c.image_path AS image_path FROM `cofrades` c INNER JOIN provincia pr ON c.provincia_id = pr.id INNER JOIN localidad l ON c.localidad_id = l.id INNER JOIN banco b ON c.banco_id = b.id INNER JOIN motivo_baja mb ON c.baja_id = mb.id WHERE c.delete_flag = 0 ORDER BY c.id ASC");
 						while ($row = $qry->fetch_assoc()) :
 							foreach ($row as $k => $v) {
 								$row[$k] = trim(stripslashes($v));
@@ -49,8 +50,11 @@
 								<td class="text-center"><?php echo $i++; ?></td>
 								<td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
 								
-								<td><?php echo ucwords($row['name']) ?></td>
+								<td><?php echo ucwords($row['nombres']) ?></td>
+								<td><?php echo ucwords($row['localidad']) ?></td>
 								<td><?php echo ucwords($row['provincia']) ?></td>
+								<td><?php echo ucwords($row['banco']) ?></td>
+								<td><?php echo ucwords($row['baja']) ?></td>
 								<td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
 								</td>
@@ -69,7 +73,7 @@
 									<div class="dropdown-menu" role="menu">
 										<!-- <a class="dropdown-item" href="?page=products/view_product&id=<?php echo $row['id'] ?>"><span class="fa fa-eye text-dark"></span> Ver</a> -->
 										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="?page=cofrades_aux/manage_localidad&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Editar</a>
+										<a class="dropdown-item" href="?page=cofrades_aux/manage_cofrades&id=<?php echo $row['id'] ?>"><span class="fa fa-edit text-primary"></span> Editar</a>
 
 										<div class="dropdown-divider"></div>
 										<a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $row['id'] ?>"><span class="fa fa-trash text-danger"></span> Eliminar</a>
@@ -86,7 +90,7 @@
 <script>
 	$(document).ready(function() {
 		$('.delete_data').click(function() {
-			_conf("¿Estás seguro de eliminar esta localidad de forma permanente?", "delete_localidad", [$(this).attr('data-id')])
+			_conf("¿Estás seguro de eliminar este cofrades de forma permanente?", "delete_cofrade", [$(this).attr('data-id')])
 		})
 		$('.table th, .table td').addClass("align-middle px-2 py-1")
 		$('.table').dataTable();
@@ -96,7 +100,7 @@
 	function delete_localidad($id) {
 		start_loader();
 		$.ajax({
-			url: _base_url_ + "classes/Master.php?f=delete_localidad",
+			url: _base_url_ + "classes/Master.php?f=delete_cofrade",
 			method: "POST",
 			data: {
 				id: $id

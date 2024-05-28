@@ -10,51 +10,40 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 ?>
 <div class="card card-outline card-info rounded-0">
 	<div class="card-header">
-		<h3 class="card-title"><?php echo isset($id) ? "Actualizar " : "Crear " ?> Producto</h3>
+		<h3 class="card-title"><?php echo isset($id) ? "Actualizar " : "Crear " ?> Localidad</h3>
 	</div>
 	<div class="card-body">
 		<form action="" id="product-form">
+
 			<input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
-			<div class="form-group">
-				<label for="brand_id" class="control-label">Marca</label>
-				<select name="provincia_id" id="provincia_id" class="custom-select select2">
-					<option value="" <?= !isset($provincia_id) ? "selected" : "" ?> disabled></option>
-					<?php
-					$brands = $conn->query("SELECT * FROM localidad where delete_flag = 0 " . (isset($provincia_id) ? " or id = '{$provincia_id}'" : "") . " order by `name` asc ");
-					while ($row = $brands->fetch_assoc()) :
-					?>
-						<option value="<?= $row['id'] ?>" <?= isset($provincia_id) && $provincia_id == $row['id'] ? "selected" : "" ?>><?= $row['name'] ?> <?= $row['delete_flag'] == 1 ? "<small>Eliminado</small>" : "" ?></option>
-					<?php endwhile; ?>
-				</select>
-			</div>
-			<div class="form-group">
-				<label for="category_id" class="control-label">Categoría</label>
-				<select name="category_id" id="category_id" class="custom-select select2">
-					<option value="" <?= !isset($category_id) ? "selected" : "" ?> disabled></option>
-					<?php
-					$categories = $conn->query("SELECT * FROM categories where delete_flag = 0 " . (isset($category_id) ? " or id = '{$category_id}'" : "") . " order by `category` asc ");
-					while ($row = $categories->fetch_assoc()) :
-					?>
-						<option value="<?= $row['id'] ?>" <?= isset($category_id) && $category_id == $row['id'] ? "selected" : "" ?>><?= $row['category'] ?> <?= $row['delete_flag'] == 1 ? "<small>Eliminado</small>" : "" ?></option>
-					<?php endwhile; ?>
-				</select>
-			</div>
+
 			<div class="form-group">
 				<label for="name" class="control-label">Nombre</label>
 				<input name="name" id="name" type="text" class="form-control rounded-0" value="<?php echo isset($name) ? $name : ''; ?>" required>
 			</div>
-			<div class="form-group">
-				<label for="models" class="control-label">Modelo: </small></label>
-				<input name="models" id="models" type="text" class="form-control rounded-0" value="<?php echo isset($models) ? $models : ''; ?>" required>
-			</div>
+
 			<div class="form-group">
 				<label for="description" class="control-label">Descripción</label>
 				<textarea name="description" id="description" type="text" class="form-control rounded-0 summernote" required><?php echo isset($description) ? $description : ''; ?></textarea>
 			</div>
+			
 			<div class="form-group">
-				<label for="price" class="control-label">Precio</label>
-				<input name="price" id="price" type="number" class="form-control rounded-0 text-right" value="<?php echo isset($price) ? $price : 0; ?>" required>
+				<label for="provincia_id" class="control-label">Provincia</label>
+				<select name="provincia_id" id="provincia_id" class="custom-select select2">
+					<option value="" <?= !isset($provincia_id) ? "selected" : "" ?> disabled></option>
+					<?php
+					$brands = $conn->query("SELECT * FROM provincia where delete_flag = 0 " . (isset($provincia_id) ? " or id = '{$provincia_id}'" : "") . " order by `des_provincia` asc ");
+					while ($row = $brands->fetch_assoc()) :
+					?>
+						<option value="<?= $row['id'] ?>" <?= isset($provincia_id) && $provincia_id == $row['id'] ? "selected" : "" ?>><?= $row['des_provincia'] ?> <?= $row['delete_flag'] == 1 ? "<small>Eliminado</small>" : "" ?></option>
+					<?php endwhile; ?>
+				</select>
 			</div>
+			
+			
+			
+			
+			
 			<div class="form-group">
 				<label for="status" class="control-label">Estado</label>
 				<select name="status" id="status" class="custom-select selevt">
@@ -65,7 +54,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			<div class="form-group">
 				<div class="row">
 					<div class="col-md-6">
-						<label for="" class="control-label">Imagen de Producto</label>
+						<label for="" class="control-label">Imagen de Localidad</label>
 						<div class="custom-file">
 							<input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
 							<label class="custom-file-label" for="customFile">Examinar</label>
@@ -112,7 +101,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 			$('.err-msg').remove();
 			start_loader();
 			$.ajax({
-				url: _base_url_ + "classes/Master.php?f=save_product",
+				url: _base_url_ + "classes/Master.php?f=save_localidad",
 				data: new FormData($(this)[0]),
 				cache: false,
 				contentType: false,
@@ -127,7 +116,8 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				},
 				success: function(resp) {
 					if (typeof resp == 'object' && resp.status == 'success') {
-						location.href = "./?page=products/view_product&id=" + resp.id;
+						// location.href = "./?page=products/view_product&id=" + resp.id;
+						location.href = "./?page=cofrades_aux/localidad";
 					} else if (resp.status == 'failed' && !!resp.msg) {
 						var el = $('<div>')
 						el.addClass("alert alert-danger err-msg").text(resp.msg)
