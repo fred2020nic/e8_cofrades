@@ -24,13 +24,51 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
             <label for="des_provincia" class="control-label">Nombre Provincia</label>
             <input name="des_provincia" id="des_provincia" class="form-control form-control-sm" value="<?php echo isset($des_provincia) ? $des_provincia : ''; ?>" required />
         </div>
-        <div class="form-group">
-            <label for="usuario" class="control-label">Usuario</label>
-            <input name="usuario" id="usuario" class="form-control form-control-sm" value="<?php echo isset($usuario) ? $usuario : ''; ?>" required />
+       
+
+  <div class="form-group">
+            <label for="usuario_mod" class="control-label">Usuario Creador</label>
+            <?php
+                $value = ''; // Default value
+                $user = $_settings->userdata('username');
+
+                if (isset($usuario)) {
+                    $value = $usuario;
+                } elseif (isset($usuario_mod)) {
+                    $value = $usuario_mod;
+                } else {  // Corrected elseif condition
+                    $value = isset($user) ? $user : ''; // Set $value to $user if it exists, otherwise empty string
+                }
+                ?>
+                <input type="text" name="usuario" id="usuario" class="form-control form-control-sm" placeholder="Enter Username" value="<?php echo $value; ?>" required />
         </div>
+
+        <div class="form-group">
+            <label for="usuario" class="control-label">Usuario Modificador</label>
+            <input name="usuario_mod" id="usuario_mod" class="form-control form-control-sm" value="<?php echo isset($usuario) ? ($_settings->userdata('username')) : ($_settings->userdata("username")) ?>" required />
+        </div>
+
+        <div class="form-group">
+              
+                    <?php
+                    $value = '';
+                    
+                    // Get current time in CST timezone
+                        date_default_timezone_set('America/Costa_Rica'); // Set timezone to CST
+                        $date_modificacion = date("Y-m-d H:i:s"); 
+
+                        // Set value for the input field
+                        if (isset($date_modificacion)) {
+                            $value = $date_modificacion;
+                        } else {
+                            $value = isset($date_mod) ? $date_mod : ''; 
+                        }
+                    ?>
+                <input type="hidden" type="text" name="date_mod" id="date_mod" class="form-control form-control-sm" value="<?php echo $value; ?>" required />
+            </div>
         <div class="form-group">
             <label for="cod_postal" class="control-label">Codigo Postal</label>
-            <input name="cod_postal" id="cod_postal" class="form-control form-control-sm" value="<?php echo isset($cod_postal) ? $cod_postal : ''; ?>" required />
+            <input name="cod_postal" id="cod_postal" class="form-control form-control-sm" value="<?php echo isset($cod_postal) ? $cod_postal : ''; ?>" maxlength="5" required />
         </div>
         <div class="form-group">
             <label for="status" class="control-label">Estado</label>
@@ -39,7 +77,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Inactivo</option>
             </select>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="" class="control-label">Logo</label>
             <div class="custom-file">
                 <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
@@ -48,7 +86,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </div>
         <div class="form-group d-flex justify-content-center">
             <img src="<?php echo validate_image(isset($image_path) ? $image_path : "") ?>" alt="" id="cimg" class="img-fluid img-thumbnail">
-        </div>
+        </div> -->
     </form>
 </div>
 <script>
@@ -106,6 +144,12 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 }
             })
         })
+        document.getElementById('cod_bac').addEventListener('input', function(e) {
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0,4); 
+        }
+    });
+
         $('.summernote').summernote({
             height: 200,
             toolbar: [

@@ -40,9 +40,48 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 				</select>
 			</div>
 			
-			
-			
-			
+  <div class="form-group">
+            <label for="usuario_mod" class="control-label">Usuario Creador</label>
+            <?php
+                $value = ''; // Default value
+                $user = $_settings->userdata('username');
+
+                if (isset($usuario)) {
+                    $value = $usuario;
+                } elseif (isset($usuario_mod)) {
+                    $value = $usuario_mod;
+                } else {  // Corrected elseif condition
+                    $value = isset($user) ? $user : ''; // Set $value to $user if it exists, otherwise empty string
+                }
+                ?>
+                <input type="text" name="usuario" id="usuario" class="form-control form-control-sm" placeholder="Enter Username" value="<?php echo $value; ?>" required />
+        </div>
+
+        <div class="form-group">
+            <label for="usuario" class="control-label">Usuario Modificador</label>
+            <input name="usuario_mod" id="usuario_mod" class="form-control form-control-sm" value="<?php echo isset($usuario) ? ($_settings->userdata('username')) : ($_settings->userdata("username")) ?>" required />
+        </div>
+
+        <div class="form-group">
+              
+                    <?php
+                    $value = '';
+                    
+                    // Get current time in CST timezone
+                        date_default_timezone_set('America/Costa_Rica'); // Set timezone to CST
+                        $date_modificacion = date("Y-m-d H:i:s"); 
+
+                        // Set value for the input field
+                        if (isset($date_modificacion)) {
+                            $value = $date_modificacion;
+                        } else {
+                            $value = isset($date_mod) ? $date_mod : ''; 
+                        }
+                    ?>
+                <input type="hidden" type="text" name="date_mod" id="date_mod" class="form-control form-control-sm" value="<?php echo $value; ?>" required />
+            </div>
+
+	
 			
 			<div class="form-group">
 				<label for="status" class="control-label">Estado</label>
@@ -51,7 +90,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 					<option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Inactivo</option>
 				</select>
 			</div>
-			<div class="form-group">
+			<!-- <div class="form-group">
 				<div class="row">
 					<div class="col-md-6">
 						<label for="" class="control-label">Imagen de Localidad</label>
@@ -66,7 +105,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 		</form>
 	</div>

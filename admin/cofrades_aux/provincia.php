@@ -35,7 +35,7 @@
 						<tr>
 							<th>#</th>
 							<th>Fomento</th>
-							<th>Logo</th>
+							<!-- <th>Logo</th> -->
 							<th>Provincia</th>
 							<th>Usuario</th>
 							<th>Cod Postal</th>
@@ -52,9 +52,9 @@
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
 								<td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
-								<td class="text-center">
+								<!-- <td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
-								</td>
+								</td> -->
 								<td><?php echo $row['des_provincia'] ?></td>
 								<td><?php echo $row['usuario'] ?></td>
 								<td><?php echo $row['cod_postal'] ?></td>
@@ -96,7 +96,15 @@
 			uni_modal("Actualizar Provicincia", "cofrades_aux/manage_provincia.php?id=" + $(this).attr('data-id'), "mid-large")
 		})
 		$('.table th, .table td').addClass("align-middle px-2 py-1")
-		$('.table').dataTable();
+		$('.table').DataTable({
+		
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+   
+    });
 	})
 
 	function delete_brand($id) {

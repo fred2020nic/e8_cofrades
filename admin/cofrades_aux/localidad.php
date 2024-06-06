@@ -29,7 +29,7 @@
 							<th>Fecha Creación</th>
 							<th>Loclidad</th>
 							<th>Provincia</th>
-							<th>Imagen</th>
+							<!-- <th>Imagen</th> -->
 							
 							
 							<th>Estado</th>
@@ -51,9 +51,9 @@
 								
 								<td><?php echo ucwords($row['name']) ?></td>
 								<td><?php echo ucwords($row['provincia']) ?></td>
-								<td class="text-center">
+								<!-- <td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
-								</td>
+								</td> -->
 								<td class="text-center">
 									<?php if ($row['status'] == 1) : ?>
 										<span class="badge badge-success px-3 rounded-pill">Activo</span>
@@ -89,8 +89,16 @@
 			_conf("¿Estás seguro de eliminar esta localidad de forma permanente?", "delete_localidad", [$(this).attr('data-id')])
 		})
 		$('.table th, .table td').addClass("align-middle px-2 py-1")
-		$('.table').dataTable();
-		$('.table').dataTable();
+		
+		$('.table').DataTable({
+		
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+   
+    });
 	})
 
 	function delete_localidad($id) {

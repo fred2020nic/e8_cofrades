@@ -93,8 +93,15 @@
 			_conf("¿Estás seguro de eliminar este cofrades de forma permanente?", "delete_cofrade", [$(this).attr('data-id')])
 		})
 		$('.table th, .table td').addClass("align-middle px-2 py-1")
-		$('.table').dataTable();
-		$('.table').dataTable();
+		$('.table').DataTable({
+		
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+   
+    });
 	})
 
 	function delete_localidad($id) {

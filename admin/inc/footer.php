@@ -64,13 +64,22 @@
   </div>
 </footer>
 </div>
-<!-- ./wrapper -->
 
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Summernote -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+
+<!-- ./wrapper -->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> <script>
+$.widget.bridge('uibutton', $.ui.button)
 </script>
-<!-- Bootstrap 4 -->
 <script src="<?php echo base_url ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
 <script src="<?php echo base_url ?>plugins/chart.js/Chart.min.js"></script>
@@ -78,26 +87,26 @@
 <script src="<?php echo base_url ?>plugins/sparklines/sparkline.js"></script>
 <!-- Select2 -->
 <script src="<?php echo base_url ?>plugins/select2/js/select2.full.min.js"></script>
-<!-- JQVMap -->
-<script src="<?php echo base_url ?>plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="<?php echo base_url ?>plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="<?php echo base_url ?>plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="<?php echo base_url ?>plugins/moment/moment.min.js"></script>
-<script src="<?php echo base_url ?>plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="<?php echo base_url ?>plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="<?php echo base_url ?>plugins/summernote/summernote-bs4.min.js"></script>
+
+
 <script src="<?php echo base_url ?>plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo base_url ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo base_url ?>plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="<?php echo base_url ?>plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<!-- overlayScrollbars -->
-<!-- <script src="<?php echo base_url ?>plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> -->
-<!-- AdminLTE App -->
-<script src="<?php echo base_url ?>dist/js/adminlte.js"></script>
+
+<script src="<?php echo base_url ?>plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo base_url ?>plugins/jszip/jszip.min.js"></script>
+<script src="<?php echo base_url ?>plugins/pdfmake/pdfmake.min.js"></script>
+<script src="<?php echo base_url ?>plugins/pdfmake/vfs_fonts.js"></script>
+<script src="<?php echo base_url ?>plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="<?php echo base_url ?>plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="<?php echo base_url ?>plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="<?php echo base_url ?>plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+
+<script src="<?php echo base_url ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+
+</script>
 <div class="daterangepicker ltr show-ranges opensright">
   <div class="ranges">
     <ul>

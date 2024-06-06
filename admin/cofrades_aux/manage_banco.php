@@ -1,5 +1,7 @@
 <?php
+
 require_once('./../../config.php');
+
 if (isset($_GET['id']) && $_GET['id'] > 0) {
     $qry = $conn->query("SELECT * from `banco` where id = '{$_GET['id']}' ");
     if ($qry->num_rows > 0) {
@@ -9,6 +11,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
     }
 }
 ?>
+
 <style>
     #uni_modal img#cimg {
         height: 5em;
@@ -20,14 +23,61 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 <div class="container-fluid">
     <form action="" id="brand-form">
         <input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+
+      
+
+        <div class="form-group">
+            <label for="cod_bac" class="control-label">Codigo</label>
+            <input type="number" name="cod_bac" id="cod_bac" class="form-control form-control-sm" value="<?php echo isset($cod_bac) ? $cod_bac : ''; ?>" maxlength="4" required />
+        </div>
+
         <div class="form-group">
             <label for="des_banco" class="control-label">Nombre Banco</label>
             <input name="des_banco" id="des_banco" class="form-control form-control-sm" value="<?php echo isset($des_banco) ? $des_banco : ''; ?>" required />
         </div>
+       
         <div class="form-group">
-            <label for="usuario" class="control-label">Usuario</label>
-            <input name="usuario" id="usuario" class="form-control form-control-sm" value="<?php echo isset($usuario) ? $usuario : ''; ?>" required />
+            <label for="usuario_mod" class="control-label">Usuario Creador</label>
+            <?php
+                $value = ''; // Default value
+                $user = $_settings->userdata('username');
+
+                if (isset($usuario)) {
+                    $value = $usuario;
+                } elseif (isset($usuario_mod)) {
+                    $value = $usuario_mod;
+                } else {  // Corrected elseif condition
+                    $value = isset($user) ? $user : ''; // Set $value to $user if it exists, otherwise empty string
+                }
+                ?>
+                <input type="text" name="usuario" id="usuario" class="form-control form-control-sm" placeholder="Enter Username" value="<?php echo $value; ?>" required />
         </div>
+
+        <div class="form-group">
+            <label for="usuario" class="control-label">Usuario Modificador</label>
+            <input name="usuario_mod" id="usuario_mod" class="form-control form-control-sm" value="<?php echo isset($usuario) ? ($_settings->userdata('username')) : ($_settings->userdata("username")) ?>" required />
+        </div>
+
+        <div class="form-group">
+              
+                    <?php
+                    $value = '';
+                    
+                    // Get current time in CST timezone
+                        date_default_timezone_set('America/Costa_Rica'); // Set timezone to CST
+                        $date_modificacion = date("Y-m-d H:i:s"); 
+
+                        // Set value for the input field
+                        if (isset($date_modificacion)) {
+                            $value = $date_modificacion;
+                        } else {
+                            $value = isset($date_mod) ? $date_mod : ''; 
+                        }
+                    ?>
+                <input type="hidden" type="text" name="date_mod" id="date_mod" class="form-control form-control-sm" value="<?php echo $value; ?>" required />
+            </div>
+
+
         <div class="form-group">
             <label for="status" class="control-label">Estado</label>
             <select name="status" id="status" class="custom-select selevt">
@@ -35,7 +85,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 <option value="0" <?php echo isset($status) && $status == 0 ? 'selected' : '' ?>>Inactivo</option>
             </select>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="" class="control-label">Logo</label>
             <div class="custom-file">
                 <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))">
@@ -44,10 +94,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         </div>
         <div class="form-group d-flex justify-content-center">
             <img src="<?php echo validate_image(isset($image_path) ? $image_path : "") ?>" alt="" id="cimg" class="img-fluid img-thumbnail">
-        </div>
+        </div> -->
     </form>
 </div>
 <script>
+
     window.displayImg = function(input, _this) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -102,6 +153,11 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
                 }
             })
         })
+     document.getElementById('cod_bac').addEventListener('input', function(e) {
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0,4); 
+        }
+    });
         $('.summernote').summernote({
             height: 200,
             toolbar: [

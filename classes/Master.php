@@ -179,6 +179,7 @@ class Master extends DBConnection
 			$sql = "INSERT INTO `banco` set {$data} ";
 			$save = $this->conn->query($sql);
 		} else {
+			
 			$sql = "UPDATE `banco` set {$data} where id = '{$id}' ";
 			$save = $this->conn->query($sql);
 		}

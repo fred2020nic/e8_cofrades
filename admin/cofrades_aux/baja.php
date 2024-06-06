@@ -34,7 +34,7 @@
 						<tr>
 							<th>#</th>
 							<th>Fomento</th>
-							<th>Logo</th>
+							<!-- <th>Logo</th> -->
 							<th>Motivo</th>
 							<th>Usuario</th>
 							<th>Stado</th>
@@ -50,9 +50,9 @@
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
 								<td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
-								<td class="text-center">
+								<!-- <td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
-								</td>
+								</td> -->
 								<td><?php echo $row['des_baja'] ?></td>
 								<td><?php echo $row['usuario'] ?></td>
 								<td class="text-center">
@@ -93,7 +93,15 @@
 			uni_modal("Actualizar Banco", "cofrades_aux/manage_baja.php?id=" + $(this).attr('data-id'), "mid-large")
 		})
 		$('.table th, .table td').addClass("align-middle px-2 py-1")
-		$('.table').dataTable();
+		$('.table').DataTable({
+		
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ]
+   
+    });
 	})
 
 	function delete_brand($id) {
