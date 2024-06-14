@@ -468,7 +468,7 @@ class Master extends DBConnection
 
 	function save_localidad()
 	{
-		$_POST['description'] = htmlentities($_POST['description']);
+		$_POST['name'] = htmlentities($_POST['name']);
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
@@ -545,9 +545,25 @@ class Master extends DBConnection
 
 	// Inicia grabado de cofrades
 
+	public function get_localidades(){
+		extract($_GET);
+
+		try {
+			$localidades = $this->conn->query("SELECT * FROM localidad WHERE provincia_id = '{$provincia_id}' AND delete_flag = 0 ORDER BY des_localidad ASC")->fetch_all(MYSQLI_ASSOC);
+			echo json_encode($localidades);
+		} catch (Exception $e) {
+			// Log the error for debugging
+			error_log("Error in get_localidades: " . $e->getMessage());
+	
+			// Send an error response to the client
+			http_response_code(500); // Internal Server Error
+			echo json_encode(['error' => 'An error occurred while fetching localidades']);
+		}
+	  }
+
 	function save_cofrade()
 	{
-		$_POST['description'] = htmlentities($_POST['description']);
+		$_POST['Nombre'] = htmlentities($_POST['Nombre']);
 		extract($_POST);
 		$data = "";
 		foreach ($_POST as $k => $v) {
@@ -1072,6 +1088,11 @@ switch ($action) {
 	case 'delete_provincia':
 		echo $Master->delete_provincia();
 		break;
+
+		case 'get_localidades':
+			echo $Master->get_localidades();
+			break;
+		
 
 
 	case 'save_baja':

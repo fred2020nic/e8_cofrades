@@ -32,12 +32,13 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th>#</th>
-							<th>Fomento</th>
+						<th>Codigo</th>
+							<!-- <th>Codigo</th> -->
 							<!-- <th>Logo</th> -->
-							<th>Motivo</th>
-							<th>Usuario</th>
-							<th>Stado</th>
+							<th>Descripcion</th>
+							<th>Usuario Modificador</th>
+							<th>Fecha Modificacion</th>
+							<th>Estado</th>
 							<th>Acción</th>
 						</tr>
 					</thead>
@@ -49,12 +50,13 @@
 						?>
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
-								<td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
+								<!-- <td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td> -->
 								<!-- <td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
 								</td> -->
 								<td><?php echo $row['des_baja'] ?></td>
-								<td><?php echo $row['usuario'] ?></td>
+								<td><?php echo $row['usuario_mod'] ?></td>
+								<td><?php echo $row['date_mod'] ?></td>
 								<td class="text-center">
 									<?php if ($row['status'] == 1) : ?>
 										<span class="badge badge-success mx-3 rounded-pill">Activo</span>

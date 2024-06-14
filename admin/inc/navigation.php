@@ -146,7 +146,7 @@
                   </a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/localidad" class="nav-link nav-maintenance_category">
+                  <a href="<?php echo base_url ?>admin/?page=cofrades_aux/localida" class="nav-link nav-maintenance_category">
                     <i class="nav-icon fas fa-th-list"></i>
                     <p>
                      Localidad

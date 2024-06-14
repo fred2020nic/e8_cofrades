@@ -15,9 +15,9 @@
 			<div class="container-fluid">
 				<table class="table table-bordered table-stripped">
 					<colgroup>
+						<!-- <col width="5%"> -->
+						<!-- <col width="15%"> -->
 						<col width="5%">
-						<col width="15%">
-						<col width="30%">
 						<col width="30%">
 						<col width="25%">
 						<col width="10%">
@@ -26,13 +26,13 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Fecha Creación</th>
+							<!-- <th>Fecha Creación</th> -->
 							<th>Nombres</th>
-							<th>Localidad</th>
-							<th>Provincia</th>
-							<th>Banco</th>
+							<!-- <th>Apellido</th> -->
+							<th>Aspirante</th>
+							<th>Fecha de Baja</th>
 							<th>Mot. Baja</th>
-							<th>Imagen</th>
+							<!-- <th>Imagen</th> -->
 							<th>Estado</th>
 							<th>Acción</th>
 						</tr>
@@ -48,16 +48,16 @@
 						?>
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
-								<td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td>
+								<!-- <td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td> -->
 								
 								<td><?php echo ucwords($row['nombres']) ?></td>
-								<td><?php echo ucwords($row['localidad']) ?></td>
-								<td><?php echo ucwords($row['provincia']) ?></td>
-								<td><?php echo ucwords($row['banco']) ?></td>
-								<td><?php echo ucwords($row['baja']) ?></td>
+								<td><?php echo ucwords($row['Aspirante']) ?></td>
+								<td><?php echo ucwords($row['Fecha_baja']) ?></td>
+								<td><?php echo ucwords($row['Causa_baja']) ?></td>
+								<!-- <td><?php echo ucwords($row['baja']) ?></td>
 								<td class="text-center">
 									<img src="<?= validate_image($row['image_path']) ?>" alt="Brand Logo - <?= $row['name'] ?>" class="img-logo img-thumbnail">
-								</td>
+								</td> -->
 								<td class="text-center">
 									<?php if ($row['status'] == 1) : ?>
 										<span class="badge badge-success px-3 rounded-pill">Activo</span>
