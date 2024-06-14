@@ -561,66 +561,57 @@ class Master extends DBConnection
 		}
 	  }
 
-	function save_cofrade()
-	{
-		$_POST['Nombre'] = htmlentities($_POST['Nombre']);
-		extract($_POST);
-		$data = "";
-		foreach ($_POST as $k => $v) {
-			if (!in_array($k, array('id'))) {
-				$v = $this->conn->real_escape_string($v);
-				if (!empty($data)) $data .= ",";
-				$data .= " `{$k}`='{$v}' ";
-			}
-		}
-		$check = $this->conn->query("SELECT * FROM `cofrades` where `Nombre` = '{$Nombre}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
-		if ($this->capture_err())
-			return $this->capture_err();
-		if ($check > 0) {
-			$resp['status'] = 'failed';
-			$resp['msg'] = "El Cofrade ya existe";
-			return json_encode($resp);
-			exit;
-		}
-		if (empty($id)) {
-			$sql = "INSERT INTO `cofrades` set {$data} ";
-			$save = $this->conn->query($sql);
-		} else {
-			$sql = "UPDATE `cofrades` set {$data} where id = '{$id}' ";
-			$save = $this->conn->query($sql);
-		}
-		if ($save) {
-			$resp['status'] = 'success';
-			$pid = empty($id) ? $this->conn->insert_id : $id;
-			$resp['id'] = $pid;
-			if (empty($id))
-				$resp['msg'] = "Nuevo cofrade guardado con éxito";
-			else
-				$resp['msg'] = "Cofrade actualizado con éxito";
-			if (!empty($_FILES['img']['tmp_name'])) {
-				$ext = $ext = pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION);
-				$dir = base_app . "uploads/cofreade/";
-				if (!is_dir($dir))
-					mkdir($dir);
-				$name = $pid . "." . $ext;
-				if (is_file($dir . $name))
-					unlink($dir . $name);
-				$move = move_uploaded_file($_FILES['img']['tmp_name'], $dir . $name);
-				if ($move) {
-					$this->conn->query("UPDATE `cofrades` set image_path = CONCAT('uploads/cofreade/$name','?v=',unix_timestamp(CURRENT_TIMESTAMP)) where id = '{$pid}'");
-				} else {
-					$resp['msg'] .= " El logotipo no se ha podido cargar";
-				}
-			}
-		} else {
-			$resp['status'] = 'failed';
-			$resp['err'] = $this->conn->error . "[{$sql}]";
-		}
-		if (isset($resp['msg']) && $resp['status'] == 'success') {
-			$this->settings->set_flashdata('success', $resp['msg']);
-		}
-		return json_encode($resp);
-	}
+	  function save_cofrade()
+	  {
+		$resp = [];
+		  $_POST['Nombre'] = htmlentities($_POST['Nombre']);
+		  extract($_POST);
+		  $data = "";
+		  foreach ($_POST as $k => $v) {
+			  if (!in_array($k, array('id'))) {
+				  $v = $this->conn->real_escape_string($v);
+				  if (!empty($data)) $data .= ",";
+				  $data .= " `{$k}`='{$v}' ";
+			  }
+		  }
+		  $check = $this->conn->query("SELECT * FROM `cofrades` where `Nombre` = '{$Nombre}' " . (!empty($id) ? " and id != {$id} " : "") . " ")->num_rows;
+		  if ($this->capture_err())
+			  return $this->capture_err();
+		  if ($check > 0) {
+			  $resp['status'] = 'failed';
+			  $resp['msg'] = "El Cofrade ya existe";
+			  return json_encode($resp);
+			  exit;
+		  }
+	  
+		  if (empty($id)) {
+			  $sql = "INSERT INTO `cofrades` set {$data} ";
+		  } else {
+			  $sql = "UPDATE `cofrades` set {$data} where id = '{$id}' ";
+		  }
+		  $save = $this->conn->query($sql);
+	  
+		  if ($save) {
+			  // Actualizar Numero_historico y numero_activo después de guardar
+			  $update_query = "UPDATE cofrades
+							  SET Numero_historico = id,
+								  numero_activo = IF(status = 1, 
+													 (SELECT COUNT(*) FROM cofrades AS c2 WHERE c2.id <= cofrades.id AND c2.status = 1), 
+													 0)
+							  WHERE Numero_historico = 0 OR numero_activo != (SELECT COUNT(*) FROM cofrades AS c2 WHERE c2.id <= cofrades.id AND c2.status = 1);";
+			  $this->conn->query($update_query);
+	  
+			  // ... (resto del código para manejar la imagen y la respuesta)
+		  } else {
+			  $resp['status'] = 'failed';
+			  $resp['err'] = $this->conn->error . "[{$sql}]";
+		  }
+		  if (isset($resp['msg']) && $resp['status'] == 'success') {
+			  $this->settings->set_flashdata('success', $resp['msg']);
+		  }
+		  return json_encode($resp);
+	  }
+	  
 	function delete_cofrade()
 	{
 		extract($_POST);

@@ -18,6 +18,7 @@
 						<!-- <col width="5%"> -->
 						<!-- <col width="15%"> -->
 						<col width="5%">
+						<col width="5%">
 						<col width="30%">
 						<col width="25%">
 						<col width="10%">
@@ -26,6 +27,7 @@
 					<thead>
 						<tr>
 							<th>#</th>
+							<th>Numero Activo</th>
 							<!-- <th>Fecha Creación</th> -->
 							<th>Nombres</th>
 							<!-- <th>Apellido</th> -->
@@ -49,6 +51,7 @@
 							<tr>
 								<td class="text-center"><?php echo $i++; ?></td>
 								<!-- <td><?php echo date("Y-m-d H:i", strtotime($row['date_created'])) ?></td> -->
+								<td><?php echo ucwords($row['numero_activo']) ?></td>
 								
 								<td><?php echo ucwords($row['nombres']) ?></td>
 								<td><?php echo ucwords($row['Aspirante']) ?></td>

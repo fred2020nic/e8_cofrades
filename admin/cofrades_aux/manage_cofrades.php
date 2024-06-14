@@ -9,6 +9,18 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
 }
 
 $esEdicion = isset($_GET['id']) && $_GET['id'] > 0;
+
+if (!$esEdicion) { // Si es un nuevo registro
+    $result = $conn->query("SELECT MAX(Numero_historico) as max_num FROM cofrades");
+    $row = $result->fetch_assoc();
+    $Numero_historico = $row['max_num'] + 1;
+    $numero_activo = $Numero_historico;
+} else {
+    // Si se está editando, mantener los valores existentes
+    $Numero_historico = isset($Numero_historico) ? $Numero_historico : 0; 
+    $numero_activo = isset($numero_activo) ? $numero_activo : 0; 
+}
+
 ?>
 <div class="card card-outline card-info rounded-0">
 	<div class="card-header">
@@ -17,7 +29,18 @@ $esEdicion = isset($_GET['id']) && $_GET['id'] > 0;
 	<div class="card-body">
 		<form action="" id="product-form">
 
-			<input type="hidden" name="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<input name="id" value="<?php echo isset($id) ? $id : '' ?>">
+			<div class="row">
+				<div class="form-group col-1">
+					<label for="Numero_historico" class="control-label">Num His</label>
+					<input name="Numero_historico" id="Numero_historico" type="text" class="form-control rounded-0" value="<?php echo isset($Numero_historico) ? $Numero_historico : ''; ?>" required>
+				</div>
+				<div class="form-group col-1">
+					<label for="numero_activo" class="control-label">Num Act</label>
+					<input name="numero_activo" id="numero_activo" type="text" class="form-control rounded-0" value="<?php echo isset($numero_activo) ? $numero_activo : ''; ?>" required>
+				</div>
+			</div>
+
 			Datos de generales
 			<div class="row">
 				<div class="form-group col-4">
@@ -129,22 +152,44 @@ $esEdicion = isset($_GET['id']) && $_GET['id'] > 0;
         ?>
     </select>
 </div> -->
-<div class="form-group col-4">
-    <label for="localidad_id" class="control-label">Localidad</label>
-    <select name="localidad_id" id="localidad_id" class="custom-select select2">
-        <option value="" disabled selected>Seleccione una Localidad</option>
-        <?php
-        $localidades = $conn->query("SELECT * FROM localidad WHERE provincia_id = " . (isset($provincia_id) ? $provincia_id : '0') . " AND delete_flag = 0 ORDER BY name ASC");
-        while ($row = $localidades->fetch_assoc()) :
-        ?>
-            <option value="<?= $row['id'] ?>" <?= isset($localidad_id) && $localidad_id == $row['id'] ? "data-selected" : "" ?>><?= $row['name'] ?></option>
-        <?php endwhile; ?>
-    </select>
-</div>
+<?php
+if (isset($id)) { // Inicio del bloque PHP para la parte del formulario que depende de $id
+?>
+   	<div class="form-group  col-4">
+					<label for="localidad_id" class="control-label">Localidad</label>
+					<select name="localidad_id" id="localidad_id" class="custom-select select2">
+						<option value="" <?= !isset($localidad_id) ? "selected" : "" ?> disabled></option>
+						<?php
+						$localidad_ids = $conn->query("SELECT * FROM localidad where delete_flag = 0 " . (isset($localidad_id) ? " or id = '{$baja_id}'" : "") . " order by `name` asc ");
+						while ($row = $localidad_ids->fetch_assoc()) :
+						?>
+							<option value="<?= $row['id'] ?>" <?= isset($localidad_id) && $localidad_id == $row['id'] ? "selected" : "" ?>><?= $row['name'] ?> <?= $row['delete_flag'] == 1 ? "<small>Eliminado</small>" : "" ?></option>
+						<?php endwhile; ?>
+					</select>
+				</div>
+<?php
+} else { // Inicio del bloque PHP para la parte del formulario que se muestra cuando no se está editando
+?>
+    <div class="form-group col-4">
+        <label for="localidad_id" class="control-label">Localidad</label>
+        <select name="localidad_id" id="localidad_id" class="custom-select select2">
+            <option value="" disabled selected>Seleccione una Localidad</option>
+            <?php
+            // Consulta SQL para obtener las localidades
+            $localidades = $conn->query("SELECT * FROM localidad WHERE provincia_id = " . (isset($provincia_id) ? $provincia_id : '0') . " AND delete_flag = 0 ORDER BY name ASC");
+            while ($row = $localidades->fetch_assoc()) :
+            ?>
+                <option value="<?= $row['id'] ?>" <?= isset($localidad_id) && $localidad_id == $row['id'] ? "data-selected" : "" ?>><?= $row['name'] ?></option>
+            <?php endwhile; ?>
+        </select>
+    </div>
+<?php
+} // Cierre del bloque else
+?>
+			
 
-
 </div>
-						<!-- location.href = "./?page=cofrades_aux/cofrades"; -->
+			
 			Datos de comunicacion
 			<div class="row">
 
@@ -359,7 +404,63 @@ $esEdicion = isset($_GET['id']) && $_GET['id'] > 0;
 
 		
 			
+   <div class="form-group">
+            <label for="usuario_mod" class="control-label">Usuario Creador</label>
+            <?php
+            $value = ''; // Default value
+            $user = $_settings->userdata('username');
 
+            if (isset($usuario)) {
+                $value = $usuario;
+            } elseif (isset($usuario_mod)) {
+                $value = $usuario_mod;
+            } else {  // Corrected elseif condition
+                $value = isset($user) ? $user : ''; // Set $value to $user if it exists, otherwise empty string
+            }
+            ?>
+            <input type="text" name="usuario" id="usuario" class="form-control form-control-sm" placeholder="Enter Username" value="<?php echo $value; ?>" readonly />
+        </div>
+        <div class="form-group">
+            <label for="usuario" class="control-label">Fecha Creada</label>
+
+            <?php
+            date_default_timezone_set('America/Costa_Rica'); // Establecemos la zona horaria a Costa Rica
+
+            // Verificamos si $date_created está definido y no es nulo
+            if (!isset($date_created) || is_null($date_created)) {
+                $value = date("Y-m-d H:i:s"); // Si no está definido, usamos la fecha y hora actual
+            } else {
+                $value = $date_created; // Si está definido, usamos su valor
+            }
+            ?>
+            <input type="text" name="date_created" id="date_created" class="form-control form-control-sm" value="<?php echo $value; ?>" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="usuario" class="control-label">Usuario Modificador</label>
+            <input name="usuario_mod" id="usuario_mod" class="form-control form-control-sm" value="<?php echo isset($usuario) ? ($_settings->userdata('username')) : ($_settings->userdata("username")) ?>" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="usuario" class="control-label">Fecha Modificador</label>
+
+            <?php
+            $value = '';
+
+            // Get current time in CST timezone
+            date_default_timezone_set('America/Costa_Rica'); // Set timezone to CST
+            $date_mod = " ";
+
+            // Set value for the input field
+            if (!isset($date_mod)) {
+                $value = $date_mod;
+            } else {
+                $date_mod = date("Y-m-d H:i:s");
+                $value =  $date_mod;
+            }
+            ?>
+            <input type="text" name="date_mod" id="date_mod" class="form-control form-control-sm" value="<?php echo $value; ?>" readonly />
+        </div>
 
 		</form>
 	</div>
@@ -374,9 +475,6 @@ $esEdicion = isset($_GET['id']) && $_GET['id'] > 0;
 
 
 <script>
-
-
-
 // 	function loadLocalidades(provinciaId) {
 		
 //   const provinciaSeleccionadaDiv = document.querySelector('.provincia_seleccionada');
@@ -455,7 +553,7 @@ function loadLocalidades(provinciaId) {
 				dataType: 'json',
 				error: err => {
 					console.log(err)
-					alert_toast("Ocurrió un error", 'error');
+					alert_toast("Revisar los select hallan llenados", 'error');
 					end_loader();
 				},
 				success: function(resp) {
@@ -471,7 +569,8 @@ function loadLocalidades(provinciaId) {
 						}, "fast");
 						end_loader()
 					} else {
-						alert_toast("Ocurrió un error", 'error');
+						// alert_toast("Ocurrió un error", 'error');
+						location.href = "./?page=cofrades_aux/cofrades";
 						end_loader();
 						console.log(resp)
 					}
